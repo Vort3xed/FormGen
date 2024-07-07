@@ -3,17 +3,18 @@ from httplib2 import Http
 from oauth2client import client, file, tools
 import yaml
 
+# set form api scopes
 SCOPES = "https://www.googleapis.com/auth/forms.body"
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
-# Load credentials
+# load credentials
 store = file.Storage("token.json")
 creds = store.get()
 if not creds or creds.invalid:
     flow = client.flow_from_clientsecrets("client_secret_980008295896-itr48p4d1logvum8gs64svc628g1forr.apps.googleusercontent.com.json", SCOPES)
     creds = tools.run_flow(flow, store)
 
-# Build the service
+# setup service
 form_service = discovery.build(
     "forms",
     "v1",
@@ -22,22 +23,26 @@ form_service = discovery.build(
     static_discovery=False,
 )
 
+# load yaml file
 def load_structure(file_path):
     with open(file_path, 'r') as file:
         return yaml.safe_load(file)
 
+# create form
 def create_form(service, form_structure):
     form = {
         "info": {
             "title": form_structure['form_title'],
             # "description": form_structure.get('description', '')
+            
+            #google oauth doesnt allow description to be added during form creation request? must be added using batch update
         }
     }
-    # Create the form
+    # create the form
     result = service.forms().create(body=form).execute()
     form_id = result['formId']
 
-    # Add sections and questions sequentially in reverse order
+    # add sections and questions sequentially in reverse order
     keys = [key for key in form_structure.keys() if key not in ['form_title', 'description']]
     keys.reverse()
 
@@ -49,7 +54,7 @@ def create_form(service, form_structure):
 def add_section(service, form_id, section):
     requests = []
     
-    # Add section header
+    # add section header
     requests.append({
         "createItem": {
             "item": {
@@ -63,7 +68,7 @@ def add_section(service, form_id, section):
         }
     })
     
-    # Add textblock if it exists
+    # add textblock if it exists
     if 'textblock' in section:
         requests.append({
             "createItem": {
@@ -78,7 +83,7 @@ def add_section(service, form_id, section):
             }
         })
 
-    # Add questions
+    # add questions
     index = 2  # Start after section header and textblock
     for question in section.get('questions', []):
         if question['type'] == 'multiple_choice':
@@ -120,16 +125,16 @@ def add_section(service, form_id, section):
         })
         index += 1
 
-    # Execute the batch update
+    # execute the batch update
     batch_update_request = {
         "requests": requests
     }
     service.forms().batchUpdate(formId=form_id, body=batch_update_request).execute()
 
 if __name__ == "__main__":
-    # Load the YAML structure
+    # load the YAML structure
     form_structure = load_structure('games/actualgame.yaml')
 
-    # Create the form
+    # generate the form and print ID
     form_id = create_form(form_service, form_structure)
     print(f"Form created with ID: {form_id}")
