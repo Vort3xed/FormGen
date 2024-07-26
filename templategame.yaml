@@ -1,0 +1,56 @@
+form_title: "Title"
+description: |
+  Description.
+start_section:
+  id: 1
+  title: "Section 1"
+  description: |
+    Section Description text
+  questions:
+    - type: multiple_choice
+      text: "Where do you choose to go?"
+      options:
+        - text: "Option 1"
+        - text: "Option 2"
+  textblock: 
+    title: ""
+    description: |
+      Textblock description text
+section1:
+  id: 2
+  title: "2024! (BCE)"
+  description: |
+    "Section Description Text"
+  questions:
+    - type: short_answer
+      text: "Question Text"
+      correct_answer: "Asnwer"
+  textblock: 
+    title: "Title"
+    description: |
+      "Textblock Description"
+section2:
+  id: 3
+  title: "Section 2"
+  description: |
+    Section Description text
+  questions:
+    - type: multiple_choice
+      text: "Question Text"
+      options:
+        - text: "Option 1"
+        - text: "Option 2"
+        - text: "Option 3"
+        - text: "Option 4"
+        - text: "Option 5"
+        - text: "Option 6"
+        - text: "Option 7"
+final_section:
+  id: 4
+  title: "Final Section"
+  description: |
+    "Final Description"
+  textblock: 
+    title: "Congratulations!"
+    description: "Congratulations!"
+  questions: []

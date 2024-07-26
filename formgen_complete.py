@@ -2,6 +2,7 @@ from apiclient import discovery
 from httplib2 import Http
 from oauth2client import client, file, tools
 import yaml
+import argparse
 
 # set form api scopes
 SCOPES = "https://www.googleapis.com/auth/forms.body"
@@ -25,6 +26,9 @@ form_service = discovery.build(
 
 # load yaml file
 def load_structure(file_path):
+    if file_path is None:
+        print("Google OAUTH2.0 Authentication flow completed. Path was not provided. Example usage with path: python3 formgen_complete.py -p templategame.yaml")
+        exit(0)
     with open(file_path, 'r') as file:
         return yaml.safe_load(file)
 
@@ -133,7 +137,14 @@ def add_section(service, form_id, section):
 
 if __name__ == "__main__":
     # load the YAML structure
-    form_structure = load_structure('games/actualgame.yaml')
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-p", "--path", help = "Enter Path to the yaml file")
+
+    args = parser.parse_args()
+
+    # form_structure = load_structure('games/bardgame/bardgame.yaml')
+    form_structure = load_structure(args.path)
 
     # generate the form and print ID
     form_id = create_form(form_service, form_structure)
