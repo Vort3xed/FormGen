@@ -15,7 +15,7 @@ Limited by the functionality of Google Forms API.
 
 ## Installation Steps (Windows):
 
-1. Install Python 3.10 on your local device. Any version of Python 3 should work. Installation steps found here: https://phoenixnap.com/kb/how-to-install-python-3-windows
+1. Install Python 3.10 on your local device. Any version of Python 3.10+ should work. Installation steps found here: https://phoenixnap.com/kb/how-to-install-python-3-windows
 
 2. Ensure Python 3 was properly installed on your device by running the following command in your terminal: `python3 --version`
 
